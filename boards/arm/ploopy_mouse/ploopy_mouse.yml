@@ -1,0 +1,13 @@
+identifier: ploopy_mouse
+name: ploopy_mouse
+type: mcu
+arch: arm
+flash: 16184
+ram: 264
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - spi
+  - serial

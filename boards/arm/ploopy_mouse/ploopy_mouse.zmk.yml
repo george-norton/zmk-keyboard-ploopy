@@ -1,0 +1,10 @@
+file_format: "1"
+id: ploopy_mouse
+name: ploopy_mouse
+type: board
+arch: arm
+features:
+  - keys
+outputs:
+  - usb
+url: https://ploopy.co/mouse/

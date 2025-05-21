@@ -1,0 +1,19 @@
+/*
+ * Copyright (c) 2025, George Norton
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <dt-bindings/pinctrl/rpi-pico-rp2040-pinctrl.h>
+
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            pinmux = <SPI0_CSN_P5>, <SPI0_SCK_P2>, <SPI0_TX_P7>;
+        };
+        group2 {
+            pinmux = <SPI0_RX_P0>;
+            input-enable;
+        };
+    };
+
+};

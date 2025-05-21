@@ -1,0 +1,9 @@
+name: ploopy-zmk-module
+build:
+  depends:
+    - pmw3360-zephyr-module
+  cmake: .
+  kconfig: Kconfig
+  settings:
+    board_root: .
+    dts_root: .

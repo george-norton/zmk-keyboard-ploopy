@@ -1,0 +1,12 @@
+# Copyright (c) 2025, George Norton
+# SPDX-License-Identifier: MIT
+
+if BOARD_PLOOPY_MOUSE
+
+config BOARD
+    default "ploopy_mouse"
+
+config RP2_FLASH_W25Q080
+    default y
+
+endif # BOARD_PLOOPY_MOUSE

@@ -1,0 +1,20 @@
+// Copyright (c) 2023 The ZMK Contributors
+// SPDX-License-Identifier: MIT
+
+#include <behaviors.dtsi>
+#include <behaviors/mouse_keys.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/mouse.h>
+
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        base {
+            bindings = <
+                &mkp MB1    &mkp MB3    &mkp MB2    &mkp MB5    &mkp MB4    &kp LC(V)   &kp LC(C)   &bootloader
+            >;
+        };
+    };
+};
