@@ -22,21 +22,6 @@
     };
 
     behaviors {
-        ec_s: mouse_scroll {
-                compatible = "zmk,behavior-input-two-axis";
-                #binding-cells = <1>;
-                trigger-period-ms = <12>; // slow down for OTA, default is 3ms
-                x-input-code = <INPUT_REL_HWHEEL>;
-                y-input-code = <INPUT_REL_WHEEL>;
-                time-to-max-speed-ms = <177>;
-                acceleration-exponent = <0>;
-        };
-        rot_enc: sensor_rotate {
-                compatible = "zmk,behavior-sensor-rotate";
-                #sensor-binding-cells = <0>;
-                bindings = <&ec_s MOVE_Y(-37)>, <&ec_s MOVE_Y(37)>;
-                tap-ms = <65>;
-        };
         lmkt: layer_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -46,22 +31,18 @@
             display-name = "Layer-Tap";
         };
     };
-
     keymap {
         compatible = "zmk,keymap";
-
-        base {
+        base_layer {
             bindings = <
-                &mkp MB1    &lmkt SCROLL MB3    &mkp MB2    &mkp MB5    &mkp MB4    &kp LC(V)   &kp LC(C)   &bootloader
+                &mkp MB4    &mkp MB5    &mo SCROLL    &mkp MB2    &mkp MB1    &mkp MB3
             >;
-            sensor-bindings = < &rot_enc >;
         };
 
         scroll_layer {
             bindings = <
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans  &trans
             >;
-            sensor-bindings = < &rot_enc >;
         };
     };
 };

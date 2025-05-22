@@ -1,0 +1,12 @@
+# Copyright (c) 2025, George Norton
+# SPDX-License-Identifier: MIT
+
+if BOARD_PLOOPY_ADEPT
+
+config BOARD
+    default "ploopy_adept"
+
+config RP2_FLASH_W25Q080
+    default y
+
+endif # BOARD_PLOOPY_ADEPT

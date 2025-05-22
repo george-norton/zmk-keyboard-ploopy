@@ -1,0 +1,10 @@
+file_format: "1"
+id: ploopy_adept
+name: ploopy_adept
+type: board
+arch: arm
+features:
+  - keys
+outputs:
+  - usb
+url: https://ploopy.co/adept/
