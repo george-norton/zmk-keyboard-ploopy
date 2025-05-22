@@ -1,0 +1,13 @@
+identifier: ploopy_classic_2
+name: ploopy_classic_2
+type: mcu
+arch: arm
+flash: 16184
+ram: 264
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - spi
+  - encoder

@@ -5,12 +5,12 @@ This is an experimental ZMK module adding support for Ploopy RP2040 device. Curr
 ## TODO
 
 - ZMK studio support
-- Classic 2 support
 - Behaviour to cycle through DPI values
 
 ## Untested (use at your own risk)
 
 - Adept support
+- Classic 2 support
 
 ## Done
 

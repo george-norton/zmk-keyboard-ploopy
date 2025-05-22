@@ -1,6 +1,6 @@
 file_format: "1"
-id: ploopy_mouse
-name: ploopy_mouse
+id: ploopy_classic_2
+name: ploopy_classic_2
 type: board
 arch: arm
 features:
@@ -9,4 +9,4 @@ features:
   - pointer
 outputs:
   - usb
-url: https://ploopy.co/mouse/
+url: https://ploopy.co/classic-2-trackball/

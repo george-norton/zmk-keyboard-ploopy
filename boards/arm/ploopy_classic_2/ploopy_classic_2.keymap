@@ -1,0 +1,40 @@
+// Copyright (c) 2023 The ZMK Contributors
+// SPDX-License-Identifier: MIT
+
+#include <behaviors.dtsi>
+#include <behaviors/mouse_keys.dtsi>
+#include <behaviors/mouse_move.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/mouse.h>
+
+
+/ {
+    behaviors {
+        ec_s: mouse_scroll {
+                compatible = "zmk,behavior-input-two-axis";
+                #binding-cells = <1>;
+                trigger-period-ms = <12>; // slow down for OTA, default is 3ms
+                x-input-code = <INPUT_REL_HWHEEL>;
+                y-input-code = <INPUT_REL_WHEEL>;
+                time-to-max-speed-ms = <177>;
+                acceleration-exponent = <0>;
+        };
+        rot_enc: sensor_rotate {
+                compatible = "zmk,behavior-sensor-rotate";
+                #sensor-binding-cells = <0>;
+                bindings = <&ec_s MOVE_Y(-37)>, <&ec_s MOVE_Y(37)>;
+                tap-ms = <65>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base {
+            bindings = <
+                &mkp MB1    &mkp MB3    &mkp MB2    &mkp MB4    &mkp MB5
+            >;
+        sensor-bindings = < &rot_enc >;
+        };
+    };
+};

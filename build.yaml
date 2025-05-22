@@ -15,3 +15,4 @@
 include:
   - board: ploopy_mouse
   - board: ploopy_adept
+  - board: ploopy_classic_2

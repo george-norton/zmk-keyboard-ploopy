@@ -5,6 +5,7 @@ type: board
 arch: arm
 features:
   - keys
+  - pointer
 outputs:
   - usb
 url: https://ploopy.co/adept/
