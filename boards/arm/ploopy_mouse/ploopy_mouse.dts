@@ -90,8 +90,7 @@
 
         // pmw3360 driver parameters
         irq-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        // 9/13
-        cpi = <600>;
+        cpi = <1200>;
         rotate-180;
     };
 };
@@ -108,6 +107,29 @@
     gpio-reserved-ranges = < 1 3 4 6 8 10 11 16 18 20 25 27 29 >;
 };
 
+&adc {
+    status = "okay";
+    pinctrl-0 = <&adc_default>;
+    pinctrl-names = "default";
+};
+
+/ {
+    scroll_wheel: scroll_wheel {
+        compatible = "ploopy,optical-encoder";
+        status = "okay";
+        poll-period = <10>;
+        event-startup-delay = <1000>;
+        steps = <28>;
+        io-channels = <&adc 0>, <&adc 2>;
+    };
+
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&scroll_wheel>;
+        triggers-per-rotation = <14>;
+    };
+};
+
 // for logging, if needed
 &usbd {
     status = "okay";
@@ -117,6 +139,6 @@
 };
 
 &vreg {
-	regulator-always-on;
-	regulator-allowed-modes = <REGULATOR_RPI_PICO_MODE_NORMAL>;
+    regulator-always-on;
+    regulator-allowed-modes = <REGULATOR_RPI_PICO_MODE_NORMAL>;
 };

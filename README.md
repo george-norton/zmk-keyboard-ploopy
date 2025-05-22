@@ -4,7 +4,6 @@ This is an experimental ZMK module adding support for Ploopy RP2040 device. Curr
 
 ## TODO
 
-- Implement a driver for the Ploopy optical scroll wheel
 - ZMK studio support
 - Adept support
 - Classic 2 support
@@ -13,4 +12,5 @@ This is an experimental ZMK module adding support for Ploopy RP2040 device. Curr
 ## Done
 
 - PMW3360 driver
-- Mouse support (except the scroll wheel)
+- Driver for the Ploopy optical scroll wheel
+- Mouse support

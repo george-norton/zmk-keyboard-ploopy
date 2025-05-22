@@ -1,0 +1,11 @@
+# Copyright (c) 2025 George Norton
+# SPDX-License-Identifier: MIT
+
+menuconfig PLOOPY_OPTICAL_ENCODER
+    bool "Ploopy Optical Encoder Sensor"
+    default y
+    depends on DT_HAS_PLOOPY_OPTICAL_ENCODER_ENABLED
+    select ADC
+    help
+      Enable driver for Ploopy Optical encoder sensors.
+

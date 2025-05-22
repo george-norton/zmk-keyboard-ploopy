@@ -1,0 +1,2 @@
+
+add_subdirectory_ifdef(CONFIG_SENSOR sensor/ploopy_optical_encoder)
