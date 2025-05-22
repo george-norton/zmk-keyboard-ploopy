@@ -1,7 +1,7 @@
-name: ploopy-zmk-module
+name: zmk-keyboard-ploopy
 build:
   depends:
-    - pmw3360-zephyr-module
+    - zmk-driver-pmw3360
   cmake: .
   kconfig: Kconfig
   settings:

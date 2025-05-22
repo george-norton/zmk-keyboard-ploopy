@@ -9,6 +9,6 @@ manifest:
       remote: zmkfirmware
       revision: main
       import: app/west.yml
-    - name: pmw3360-zephyr-module
+    - name: zmk-driver-pmw3360
       remote: george-norton
       revision: main

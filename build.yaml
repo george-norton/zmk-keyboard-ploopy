@@ -14,3 +14,4 @@
 ---
 include:
   - board: ploopy_mouse
+  - board: ploopy_adept
