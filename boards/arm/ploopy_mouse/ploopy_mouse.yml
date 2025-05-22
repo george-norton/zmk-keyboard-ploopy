@@ -10,5 +10,4 @@ toolchain:
   - xtools
 supported:
   - spi
-  - serial
   - encoder
