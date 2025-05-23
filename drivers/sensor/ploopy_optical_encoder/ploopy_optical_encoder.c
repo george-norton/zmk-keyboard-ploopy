@@ -21,16 +21,16 @@ LOG_MODULE_REGISTER(optical_encoder, CONFIG_SENSOR_LOG_LEVEL);
 struct ploopy_optical_encoder_config {
     uint16_t startup_delay;
     uint16_t poll_period;
-    const struct device *adc;
-    uint8_t adc_ch0;
-    uint8_t adc_ch1;
-    struct adc_sequence adc_seq;
+    const struct adc_dt_spec adc_channel0;
+    const struct adc_dt_spec adc_channel1;
     const uint16_t steps;
 };
 
 struct ploopy_optical_encoder_data {
     const struct sensor_trigger *trigger;
     sensor_trigger_handler_t handler;
+
+    struct adc_sequence adc_seq;
 
     size_t event_index;
     struct k_work_delayable work;
@@ -50,7 +50,7 @@ static void ploopy_optical_encoder_work_cb(struct k_work *work) {
     const struct device *dev = data->dev;
     const struct ploopy_optical_encoder_config *config = dev->config;
 
-    int err = adc_read(config->adc, &config->adc_seq);
+    int err = adc_read_dt(&config->adc_channel0, &data->adc_seq);
     if (err) {
         LOG_ERR("failed to read ADC channels (err %d)", err);
     }
@@ -154,36 +154,31 @@ int ploopy_optical_encoder_init(const struct device *dev) {
 
     data->dev = dev;
     data->event_index = -1;
+    data->adc_seq.buffer = data->samples;
+    data->adc_seq.buffer_size = sizeof(data->samples);
 
-    const struct adc_channel_cfg ch_cfg[] = {
-        {
-            .gain = ADC_GAIN_1,
-            .reference = ADC_REF_INTERNAL,
-            .acquisition_time = ADC_ACQ_TIME_DEFAULT,
-            .channel_id = config->adc_ch0,
-            .differential = 0,
-        },
-        {
-            .gain = ADC_GAIN_1,
-            .reference = ADC_REF_INTERNAL,
-            .acquisition_time = ADC_ACQ_TIME_DEFAULT,
-            .channel_id = config->adc_ch1,
-            .differential = 0,
-        },
-    };
+    __ASSERT(config->adc_channel0.dev == config->adc_channel1.dev,
+        "Both ADC channels must be on the same device.");
 
-    if (!device_is_ready(config->adc)) {
+    adc_sequence_init_dt(&config->adc_channel0, &data->adc_seq);
+    data->adc_seq.channels |= BIT(config->adc_channel1.channel_id);
+
+    if (!adc_is_ready_dt(&config->adc_channel0)) {
         LOG_ERR("ADC device is not ready");
         return -EINVAL;
     }
 
-    for (int i = 0; i < ARRAY_SIZE(ch_cfg); i++) {
-        err = adc_channel_setup(config->adc, &ch_cfg[i]);
-        if (err) {
-            LOG_ERR("failed to configure ADC channel (err %d)",
-                err);
-            return err;
-        }
+    err = adc_channel_setup_dt(&config->adc_channel0);
+    if (err) {
+        LOG_ERR("failed to configure ADC channel 0 (err %d)",
+            err);
+        return err;
+    }
+    err = adc_channel_setup_dt(&config->adc_channel1);
+    if (err) {
+        LOG_ERR("failed to configure ADC channel 1 (err %d)",
+            err);
+        return err;
     }
 
     k_work_init_delayable(&data->work, ploopy_optical_encoder_work_cb);
@@ -197,17 +192,8 @@ int ploopy_optical_encoder_init(const struct device *dev) {
     static const struct ploopy_optical_encoder_config ploopy_optical_encoder_cfg_##n = {            \
         .startup_delay = DT_INST_PROP(n, event_startup_delay),                                      \
         .poll_period = DT_INST_PROP(n, poll_period),                                                \
-        .adc =  DEVICE_DT_GET(DT_INST_IO_CHANNELS_CTLR(n)),                                         \
-        .adc_ch0 =  DT_INST_IO_CHANNELS_INPUT_BY_IDX(n, 0),                                         \
-        .adc_ch1 =  DT_INST_IO_CHANNELS_INPUT_BY_IDX(n, 1),                                         \
-        .adc_seq =                                                                                  \
-        {                                                                                           \
-            .channels = BIT(DT_INST_IO_CHANNELS_INPUT_BY_IDX(n, 0)) |                               \
-                        BIT(DT_INST_IO_CHANNELS_INPUT_BY_IDX(n, 1)),                                \
-            .buffer = &ploopy_optical_encoder_data_##n.samples,                                     \
-            .buffer_size = sizeof(ploopy_optical_encoder_data_##n.samples),                         \
-            .resolution = 12U,                                                                      \
-        },                                                                                          \
+        .adc_channel0 = ADC_DT_SPEC_INST_GET_BY_IDX(n, 0),                                          \
+        .adc_channel1 = ADC_DT_SPEC_INST_GET_BY_IDX(n, 1),                                          \
         .steps = DT_INST_PROP(n, steps),                                                            \
     };                                                                                              \
                                                                                                     \

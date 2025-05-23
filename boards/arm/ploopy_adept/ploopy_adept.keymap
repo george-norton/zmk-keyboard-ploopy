@@ -12,6 +12,7 @@
 #define SCROLL 1
 
 / {
+    // Enable drag scroll is the SCROLL layer is active
     mouse_listener {
         input-processors = <&zip_xy_scaler 3 2>;
 
@@ -22,6 +23,7 @@
     };
 
     behaviors {
+        // Modified layer tap that supports mouse keys.
         lmkt: layer_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -30,9 +32,18 @@
             bindings = <&mo>, <&mkp>;
             display-name = "Layer-Tap";
         };
+        // Behaviour to cycle through DPI values on a keypress
+        dpi: sensor_attr_cycle {
+            compatible = "zmk,behavior-sensor-attr-cycle";
+            #binding-cells = <0>;
+            values = < 100 300 600 900 1200 >;
+            attr = <0>;
+            sensor_device = <&mouse>;
+        };
     };
     keymap {
         compatible = "zmk,keymap";
+
         base_layer {
             bindings = <
                 &mkp MB4    &mkp MB5    &mo SCROLL    &mkp MB2    &mkp MB1    &mkp MB3

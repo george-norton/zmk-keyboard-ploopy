@@ -12,6 +12,7 @@
 #define SCROLL 1
 
 / {
+    // Enable drag scroll is the SCROLL layer is active
     mouse_listener {
         input-processors = <&zip_xy_scaler 3 2>;
 
@@ -22,10 +23,10 @@
     };
 
     behaviors {
+        // Scroll wheel behaviour, taken from badjeff
         ec_s: mouse_scroll {
                 compatible = "zmk,behavior-input-two-axis";
                 #binding-cells = <1>;
-                trigger-period-ms = <12>; // slow down for OTA, default is 3ms
                 x-input-code = <INPUT_REL_HWHEEL>;
                 y-input-code = <INPUT_REL_WHEEL>;
                 time-to-max-speed-ms = <177>;
@@ -37,6 +38,7 @@
                 bindings = <&ec_s MOVE_Y(-37)>, <&ec_s MOVE_Y(37)>;
                 tap-ms = <65>;
         };
+        // Modified layer tap that supports mouse keys.
         lmkt: layer_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -44,6 +46,14 @@
             tapping-term-ms = <200>;
             bindings = <&mo>, <&mkp>;
             display-name = "Layer-Tap";
+        };
+        // Behaviour to cycle through DPI values on a keypress
+        dpi: sensor_attr_cycle {
+            compatible = "zmk,behavior-sensor-attr-cycle";
+            #binding-cells = <0>;
+            values = < 100 300 600 900 1200 >;
+            attr = <0>;
+            sensor_device = <&mouse>;
         };
     };
 

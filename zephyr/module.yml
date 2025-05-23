@@ -2,6 +2,7 @@ name: zmk-keyboard-ploopy
 build:
   depends:
     - zmk-driver-pmw3360
+    - zmk-behavior-sensor-attr-cycle
   cmake: .
   kconfig: Kconfig
   settings:

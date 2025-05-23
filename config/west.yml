@@ -12,3 +12,6 @@ manifest:
     - name: zmk-driver-pmw3360
       remote: george-norton
       revision: main
+    - name: zmk-behavior-sensor-attr-cycle
+      remote: george-norton
+      revision: main
