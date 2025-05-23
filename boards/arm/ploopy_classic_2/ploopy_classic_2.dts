@@ -87,8 +87,7 @@
 
         // pmw3360 driver parameters
         irq-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        cpi = <1200>;
-        rotate-180;
+        cpi = <900>;
     };
 };
 
