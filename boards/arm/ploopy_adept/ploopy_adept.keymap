@@ -39,8 +39,19 @@
             values = < 100 300 600 900 1200 >;
             attr = <0>;
             sensor_device = <&mouse>;
+            persistant;
         };
     };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_esc {
+            timeout-ms = <500>;
+            key-positions = <0 1>;
+            bindings = <&bootloader>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 

@@ -16,7 +16,8 @@
 
     chosen {
         zephyr,sram = &sram0;
-        zephyr,flash = &flash0;
+		zephyr,flash = &flash0;
+		zephyr,flash-controller = &ssi;
         zephyr,console = &cdc_acm_uart;
         zephyr,code-partition = &code_partition;
         zmk,kscan = &kscan0;
@@ -48,7 +49,7 @@
 #define PLOOPY_MOUSE_FLASH_SIZE_M 16
 
 &flash0 {
-    /* 8MB of flash minus the 0x100 used for
+    /* 16MB of flash minus the 0x100 used for
      * the second stage bootloader
      */
     reg = <0x10000000 DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M)>;
@@ -70,8 +71,14 @@
          */
         code_partition: partition@100 {
             label = "code";
-            reg = <0x100 (DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M) - 0x100)>;
+            reg = <0x100 (DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M) - 0x100 - DT_SIZE_K(16))>;
             read-only;
+        };
+
+
+        /* Set 16Kb of storage at the end of the of flash */
+        storage_partition: partition@FFC000 {
+            reg = <(DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M) - DT_SIZE_K(16)) DT_SIZE_K(16)>;
         };
     };
 };
