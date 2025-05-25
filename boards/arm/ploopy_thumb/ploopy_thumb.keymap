@@ -1,4 +1,4 @@
-// Copyright (c) 2025 George Norton
+// Copyright (c) 2023 The ZMK Contributors
 // SPDX-License-Identifier: MIT
 
 #include <behaviors.dtsi>
@@ -70,16 +70,16 @@
     keymap {
         compatible = "zmk,keymap";
 
-        base {
+        base_layer {
             bindings = <
-                &mkp MB1    &lmkt SCROLL MB3    &mkp MB2    &mkp MB5    &mkp MB4    &kp LC(V)   &kp LC(C)   &dpi
+                &mkp MB4    &mkp MB1    &mkp MB3    &mkp MB2    &mkp MB5    &dpi
             >;
-            sensor-bindings = < &rot_enc >;
+        sensor-bindings = < &rot_enc >;
         };
 
         scroll_layer {
             bindings = <
-                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans
             >;
             sensor-bindings = < &rot_enc >;
         };

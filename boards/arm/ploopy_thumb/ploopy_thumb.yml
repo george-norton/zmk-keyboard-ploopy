@@ -1,0 +1,13 @@
+identifier: ploopy_thumb
+name: ploopy_thumb
+type: mcu
+arch: arm
+flash: 16184
+ram: 264
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - spi
+  - encoder

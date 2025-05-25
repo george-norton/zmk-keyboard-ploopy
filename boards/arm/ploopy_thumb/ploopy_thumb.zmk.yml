@@ -1,0 +1,12 @@
+file_format: "1"
+id: ploopy_thumb
+name: ploopy_thumb
+type: board
+arch: arm
+features:
+  - keys
+  - encoder
+  - pointer
+outputs:
+  - usb
+url: https://ploopy.co/thumb-trackball/

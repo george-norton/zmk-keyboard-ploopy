@@ -1,0 +1,166 @@
+/*
+ * Copyright (c) 2025, George Norton
+ * SPDX-License-Identifier: MIT
+ */
+
+/dts-v1/;
+
+#include <rpi_pico/rp2040.dtsi>
+#include "ploopy_thumb-pinctrl.dtsi"
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <freq.h>
+
+/ {
+    model = "ploopy_mouse";
+    compatible = "ploopy_mouse", "raspberrypi,rp2040";
+
+    chosen {
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zephyr,flash-controller = &ssi;
+        zephyr,console = &cdc_acm_uart;
+        zephyr,code-partition = &code_partition;
+        zmk,kscan = &kscan0;
+        // for logging, if needed
+        zephyr,console = &cdc_acm_uart;
+    };
+
+    xtal_clk: xtal-clk {
+        compatible = "fixed-clock";
+        clock-frequency = <12000000>;
+        #clock-cells = <0>;
+    };
+
+    kscan0: kscan_0 {
+        compatible = "zmk,kscan-gpio-direct";
+        input-gpios
+            = <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&gpio0 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            ;
+    };
+};
+
+#define PLOOPY_THUMB_FLASH_SIZE_M 16
+
+&flash0 {
+    /* 16MB of flash minus the 0x100 used for
+     * the second stage bootloader
+     */
+    reg = <0x10000000 DT_SIZE_M(PLOOPY_THUMB_FLASH_SIZE_M)>;
+
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* Reserved memory for the second stage bootloader */
+        second_stage_bootloader: partition@0 {
+            reg = <0x00000000 0x100>;
+            read-only;
+        };
+
+        /*
+         * Start at the beginning of usable flash, PLOOPY_THUMB_FLASH_SIZE_M MB minus the
+         * second stage space and the 16 KiB reserved for settings
+         */
+        code_partition: partition@100 {
+            label = "code";
+            reg = <0x100 (DT_SIZE_M(PLOOPY_THUMB_FLASH_SIZE_M) - 0x100 - DT_SIZE_K(16))>;
+            read-only;
+        };
+
+
+        /* Set 16Kb of storage at the end of the of flash */
+        storage_partition: partition@FFC000 {
+            reg = <(DT_SIZE_M(PLOOPY_THUMB_FLASH_SIZE_M) - DT_SIZE_K(16)) DT_SIZE_K(16)>;
+        };
+    };
+};
+
+&spi0 {
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-names = "default";
+    status = "okay";
+    cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
+    clock-frequency = <DT_FREQ_M(2)>;
+    mouse: mouse@0 {
+        compatible = "pixart,pmw3360";
+        status = "okay";
+        reg = <0>;
+        spi-max-frequency = <DT_FREQ_M(2)>;
+
+        // pmw3360 driver parameters
+        irq-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        cpi = <900>;
+    };
+};
+
+/ {
+    mouse_listener {
+        compatible = "zmk,input-listener";
+        device = <&mouse>;
+    };
+};
+
+&gpio0 {
+    status = "okay";
+    gpio-reserved-ranges = < 1 3 4 6 8 10 11 14 18 20 22 24 25 27 29 >;
+};
+
+&adc {
+    #address-cells = <1>;
+    #size-cells = <0>;
+    status = "okay";
+    pinctrl-0 = <&adc_default>;
+    pinctrl-names = "default";
+
+    channel@0 {
+        reg = <0>;
+        zephyr,gain = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+
+    channel@2 {
+        reg = <2>;
+        zephyr,gain = "ADC_GAIN_1";
+        zephyr,reference = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,resolution = <12>;
+    };
+};
+
+/ {
+    scroll_wheel: scroll_wheel {
+        compatible = "ploopy,optical-encoder";
+        status = "okay";
+        poll-period = <10>;
+        event-startup-delay = <1000>;
+        steps = <28>;
+        io-channels = <&adc 0>, <&adc 2>;
+    };
+
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&scroll_wheel>;
+        triggers-per-rotation = <14>;
+    };
+};
+
+// for logging, if needed
+&usbd {
+    status = "okay";
+    cdc_acm_uart: cdc_acm_uart {
+        compatible = "zephyr,cdc-acm-uart";
+    };
+};
+
+&vreg {
+    regulator-always-on;
+    regulator-allowed-modes = <REGULATOR_RPI_PICO_MODE_NORMAL>;
+};
