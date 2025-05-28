@@ -10,6 +10,8 @@
 
 #define BASE 0
 #define SCROLL 1
+#define RESERVED1 2
+#define RESERVED2 3
 
 / {
     // Enable drag scroll is the SCROLL layer is active
@@ -92,6 +94,22 @@
             >;
             sensor-bindings = < &rot_enc >;
             display-name = "Drag-scroll layer";
+        };
+
+        reserved_layer_1 {
+            bindings = <
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+            sensor-bindings = < &rot_enc >;
+            display-name = "Reserved layer";
+        };
+
+        reserved_layer_2 {
+            bindings = <
+                &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+            sensor-bindings = < &rot_enc >;
+            display-name = "Reserved layer";
         };
     };
 };
