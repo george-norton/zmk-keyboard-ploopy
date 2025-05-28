@@ -4,7 +4,7 @@ This is an experimental ZMK module adding support for Ploopy RP2040 device. Curr
 
 ## TODO
 
-- ZMK studio support
+- ZMK studio support for the Thumb, Adept and Classic 2
 
 ## Untested (use at your own risk)
 
@@ -19,4 +19,5 @@ I expect issues with button mapping and sensor orientation. There is a bootloade
 - PMW3360 driver
 - Driver for the Ploopy optical scroll wheel
 - Mouse support
+- ZMK Studio support for the mouse
 - Behaviour to cycle through DPI values
