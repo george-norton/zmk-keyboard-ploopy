@@ -48,12 +48,13 @@
             display-name = "Layer-Tap";
         };
         // Behaviour to cycle through DPI values on a keypress
-        dpi: sensor_attr_cycle {
+        dpi_cycle: sensor_dpi_cycle {
             compatible = "zmk,behavior-sensor-attr-cycle";
-            #binding-cells = <0>;
+            #binding-cells = <1>;
             values = < 100 300 600 900 1200 >;
             attr = <0>;
             sensor_device = <&mouse>;
+            display-name = "DPI cycle";
             persistant;
         };
     };
@@ -62,8 +63,13 @@
         compatible = "zmk,combos";
         combo_esc {
             timeout-ms = <500>;
-            key-positions = <3 4>;
+            key-positions = <4 6>;
             bindings = <&bootloader>;
+        };
+        combo_studio_unlock {
+            timeout-ms = <500>;
+            key-positions = <0 3>;
+            bindings = <&studio_unlock>;
         };
     };
 
@@ -72,9 +78,12 @@
 
         base {
             bindings = <
-                &mkp MB1    &lmkt SCROLL MB3    &mkp MB2    &mkp MB5    &mkp MB4    &kp LC(V)   &kp LC(C)   &dpi
+                &kp LC(C)    &mkp MB1    &mkp MB2    &kp LC(V)
+                &mkp MB5     &lmkt SCROLL MB3
+                &mkp MB4     &dpi_cycle(1)
             >;
             sensor-bindings = < &rot_enc >;
+            display-name = "Default layer";
         };
 
         scroll_layer {
@@ -82,6 +91,7 @@
                 &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
             >;
             sensor-bindings = < &rot_enc >;
+            display-name = "Drag-scroll layer";
         };
     };
 };

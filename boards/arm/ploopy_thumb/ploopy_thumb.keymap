@@ -48,12 +48,13 @@
             display-name = "Layer-Tap";
         };
         // Behaviour to cycle through DPI values on a keypress
-        dpi: sensor_attr_cycle {
+        dpi_cycle: sensor_dpi_cycle {
             compatible = "zmk,behavior-sensor-attr-cycle";
-            #binding-cells = <0>;
+            #binding-cells = <1>;
             values = < 100 300 600 900 1200 >;
             attr = <0>;
             sensor_device = <&mouse>;
+            display-name = "DPI cycle";
             persistant;
         };
     };
@@ -72,7 +73,7 @@
 
         base_layer {
             bindings = <
-                &mkp MB4    &mkp MB1    &mkp MB3    &mkp MB2    &mkp MB5    &dpi
+                &mkp MB4    &mkp MB1    &mkp MB3    &mkp MB2    &mkp MB5    &dpi_cycle(1)
             >;
         sensor-bindings = < &rot_enc >;
         };
