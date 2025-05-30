@@ -63,7 +63,7 @@
 
     combos {
         compatible = "zmk,combos";
-        combo_esc {
+        combo_bootloader {
             timeout-ms = <500>;
             key-positions = <4 6>;
             bindings = <&bootloader>;

@@ -10,6 +10,8 @@
 
 #define BASE 0
 #define SCROLL 1
+#define RESERVED1 2
+#define RESERVED2 3
 
 / {
     // Enable drag scroll is the SCROLL layer is active
@@ -46,10 +48,15 @@
 
     combos {
         compatible = "zmk,combos";
-        combo_esc {
+        combo_bootloader {
             timeout-ms = <500>;
             key-positions = <0 1>;
             bindings = <&bootloader>;
+        };
+        combo_studio_unlock {
+            timeout-ms = <500>;
+            key-positions = <4 5>;
+            bindings = <&studio_unlock>;
         };
     };
 
@@ -60,12 +67,28 @@
             bindings = <
                 &mkp MB4    &mkp MB5    &mo SCROLL    &mkp MB2    &mkp MB1    &mkp MB3
             >;
+            display-name = "Default layer";
         };
 
         scroll_layer {
             bindings = <
                 &trans  &trans  &trans  &trans  &trans  &trans
             >;
+            display-name = "Drag-scroll layer";
+        };
+
+        reserved_layer_1 {
+            bindings = <
+                &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+            display-name = "Reserved layer";
+        };
+
+        reserved_layer_2 {
+            bindings = <
+                &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+            display-name = "Reserved layer";
         };
     };
 };

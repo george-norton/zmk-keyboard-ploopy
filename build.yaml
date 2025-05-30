@@ -18,4 +18,6 @@ include:
   - board: ploopy_adept
     snippet: studio-rpc-usb-uart
   - board: ploopy_classic_2
+    snippet: studio-rpc-usb-uart
   - board: ploopy_thumb
+    snippet: studio-rpc-usb-uart
