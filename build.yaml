@@ -16,5 +16,6 @@ include:
   - board: ploopy_mouse
     snippet: studio-rpc-usb-uart
   - board: ploopy_adept
+    snippet: studio-rpc-usb-uart
   - board: ploopy_classic_2
   - board: ploopy_thumb

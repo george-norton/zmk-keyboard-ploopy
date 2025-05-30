@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 The ZMK Contributors
+ * Copyright (c) 2025, George Norton
  *
  * SPDX-License-Identifier: MIT
  */

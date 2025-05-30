@@ -7,6 +7,7 @@
 
 #include <rpi_pico/rp2040.dtsi>
 #include "ploopy_adept-pinctrl.dtsi"
+#include "ploopy_adept-layouts.dtsi"
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <freq.h>
 
@@ -18,11 +19,8 @@
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;
         zephyr,flash-controller = &ssi;
-        zephyr,console = &cdc_acm_uart;
         zephyr,code-partition = &code_partition;
         zmk,kscan = &kscan0;
-        // for logging, if needed
-        zephyr,console = &cdc_acm_uart;
     };
 
     xtal_clk: xtal-clk {
@@ -34,14 +32,29 @@
     kscan0: kscan_0 {
         compatible = "zmk,kscan-gpio-direct";
         input-gpios
-            = <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-            , <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-            , <&gpio0 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-            , <&gpio0 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-            , <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
-            , <&gpio0 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            = <&gpio0 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB3
+            , <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB4
+            , <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB5
+            , <&gpio0 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Drag Scroll
+            , <&gpio0 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB2
+            , <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB1
             ;
     };
+
+    default_transform: matrix_transform {
+        compatible = "zmk,matrix-transform";
+        rows = <1>;
+        columns = <6>;
+        map = <
+            RC(0,1) RC(0,2) RC(0,3) RC(0,4)
+            RC(0,5)                 RC(0,0)
+        >;
+    };
+};
+
+&physical_layout0 {
+    kscan = <&kscan0>;
+    transform = <&default_transform>;
 };
 
 #define PLOOPY_ADEPT_FLASH_SIZE_M 16
@@ -111,12 +124,8 @@
     gpio-reserved-ranges = < 1 3 4 6 8 10 14 16 18 20 22 24 25 26 27 28 29 >;
 };
 
-// for logging, if needed
-&usbd {
+zephyr_udc0: &usbd {
     status = "okay";
-    cdc_acm_uart: cdc_acm_uart {
-        compatible = "zephyr,cdc-acm-uart";
-    };
 };
 
 &vreg {
