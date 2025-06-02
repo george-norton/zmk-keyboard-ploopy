@@ -6,8 +6,8 @@ manifest:
       url-base: https://github.com/george-norton
   projects:
     - name: zmk
-      remote: george-norton
-      revision: behaviors/mouse-key-press-metadata
+      remote: zmkfirmware
+      revision: main
       import: app/west.yml
     - name: zmk-driver-pmw3360
       remote: george-norton
