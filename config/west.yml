@@ -15,3 +15,6 @@ manifest:
     - name: zmk-behavior-sensor-attr-cycle
       remote: george-norton
       revision: main
+    - name: zmk-driver-rp2040-sleep
+      remote: george-norton
+      revision: main

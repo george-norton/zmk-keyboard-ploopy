@@ -8,3 +8,4 @@ config BOARD_PLOOPY_ADEPT
     select pinctrl
     select INPUT
     select INPUT_PIXART_PMW3360
+    select RP2040_SLEEP

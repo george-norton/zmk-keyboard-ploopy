@@ -49,6 +49,15 @@
             RC(0,2) RC(0,3) RC(0,1) RC(0,0) RC(0,4) RC(0,5)
         >;
     };
+
+    sleep_config: rp2040_sleep {
+        compatible = "raspberrypi,rp2040-sleep";
+        sleep-en0 = <0x140007>;
+        sleep-en1 = <0x6c00>;
+        enable-en0 = <0xf3ffcf3f>;
+        enable-en1 = <0x7c3f>;
+        deep-sleep;
+    };
 };
 
 &physical_layout0 {

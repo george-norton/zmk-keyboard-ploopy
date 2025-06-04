@@ -3,6 +3,7 @@ build:
   depends:
     - zmk-driver-pmw3360
     - zmk-behavior-sensor-attr-cycle
+    - zmk-driver-rp2040-sleep
   cmake: .
   kconfig: Kconfig
   settings:

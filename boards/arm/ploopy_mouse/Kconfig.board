@@ -9,3 +9,4 @@ config BOARD_PLOOPY_MOUSE
     select INPUT
     select INPUT_PIXART_PMW3360
     select PLOOPY_OPTICAL_ENCODER
+    select RP2040_SLEEP
