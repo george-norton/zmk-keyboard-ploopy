@@ -58,8 +58,8 @@
         compatible = "raspberrypi,rp2040-sleep";
         sleep-en0 = <0x140007>;
         sleep-en1 = <0x6c00>;
-        enable-en0 = <0xf3ffcf3f>;
-        enable-en1 = <0x7c3f>;
+        wake-en0 = <0xf3ffcf3f>;
+        wake-en1 = <0x7c3f>;
         deep-sleep;
     };
 };
