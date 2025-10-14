@@ -1,0 +1,5 @@
+board:
+  name: ploopy_classic_2
+  vendor: ploopyco
+  socs:
+    - name: rp2040

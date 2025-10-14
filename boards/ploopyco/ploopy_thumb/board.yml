@@ -1,0 +1,5 @@
+board:
+  name: ploopy_thumb
+  vendor: ploopyco
+  socs:
+    - name: rp2040

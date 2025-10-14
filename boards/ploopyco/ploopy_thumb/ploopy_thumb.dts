@@ -5,7 +5,8 @@
 
 /dts-v1/;
 
-#include <rpi_pico/rp2040.dtsi>
+#include <raspberrypi/rpi_pico/rp2040.dtsi>
+#include <arm/raspberrypi/rp2040-boot-mode-retention.dtsi>
 #include "ploopy_thumb-pinctrl.dtsi"
 #include "ploopy_thumb-layouts.dtsi"
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -175,6 +176,10 @@
 
 zephyr_udc0: &usbd {
     status = "okay";
+};
+
+&timer {
+  status = "okay";
 };
 
 &vreg {
