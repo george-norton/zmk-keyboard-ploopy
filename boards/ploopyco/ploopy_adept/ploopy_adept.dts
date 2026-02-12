@@ -5,7 +5,8 @@
 
 /dts-v1/;
 
-#include <rpi_pico/rp2040.dtsi>
+#include <raspberrypi/rpi_pico/rp2040.dtsi>
+#include <arm/raspberrypi/rp2040-boot-mode-retention.dtsi>
 #include "ploopy_adept-pinctrl.dtsi"
 #include "ploopy_adept-layouts.dtsi"
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -20,6 +21,7 @@
         zephyr,flash = &flash0;
         zephyr,flash-controller = &ssi;
         zephyr,code-partition = &code_partition;
+        zephyr,boot-mode = &boot_mode;
         zmk,kscan = &kscan0;
     };
 
@@ -64,6 +66,31 @@
 &physical_layout0 {
     kscan = <&kscan0>;
     transform = <&default_transform>;
+};
+
+&sram0 {
+    reg = <0x20000004 ((DT_SIZE_K(264)) - 4)>;
+};
+
+/ {
+    sram@20000000 {
+        compatible = "zephyr,memory-region", "mmio-sram";
+        reg = <0x20000000 0x4>;
+        zephyr,memory-region = "RetainedMem";
+        status = "okay";
+
+        retainedmem {
+            compatible = "zephyr,retained-ram";
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <1>;
+            boot_mode: retention@0 {
+                compatible = "zephyr,retention";
+                status = "okay";
+                reg = <0x0 0x1>;
+            };
+        };
+    };
 };
 
 #define PLOOPY_ADEPT_FLASH_SIZE_M 16
@@ -135,6 +162,10 @@
 
 zephyr_udc0: &usbd {
     status = "okay";
+};
+
+&timer {
+  status = "okay";
 };
 
 &vreg {

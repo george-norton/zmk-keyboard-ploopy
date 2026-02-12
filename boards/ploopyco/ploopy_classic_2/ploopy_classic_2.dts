@@ -5,21 +5,23 @@
 
 /dts-v1/;
 
-#include <rpi_pico/rp2040.dtsi>
-#include "ploopy_mouse-pinctrl.dtsi"
-#include "ploopy_mouse-layouts.dtsi"
+#include <raspberrypi/rpi_pico/rp2040.dtsi>
+#include <arm/raspberrypi/rp2040-boot-mode-retention.dtsi>
+#include "ploopy_classic_2-pinctrl.dtsi"
+#include "ploopy_classic_2-layouts.dtsi"
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <freq.h>
 
 / {
-    model = "ploopy_mouse";
-    compatible = "ploopy_mouse", "raspberrypi,rp2040";
+    model = "ploopy_classic_2";
+    compatible = "ploopy_classic_2", "raspberrypi,rp2040";
 
     chosen {
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;
         zephyr,flash-controller = &ssi;
         zephyr,code-partition = &code_partition;
+        zephyr,boot-mode = &boot_mode;
         zmk,kscan = &kscan0;
     };
 
@@ -32,25 +34,21 @@
     kscan0: kscan_0 {
         compatible = "zmk,kscan-gpio-direct";
         input-gpios
-            = <&gpio0 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Copy
-            , <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB1
-            , <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB5
-            , <&gpio0 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB4
-            , <&gpio0 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB3
-            , <&gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // Paste
-            , <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // MB2
-            , <&gpio0 24 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> // DPI
+            = <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // MB1
+            , <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // MB4
+            , <&gpio0 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // MB5
+            , <&gpio0 21 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // MB3
+            , <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>  // MB2
             ;
     };
 
     default_transform: matrix_transform {
         compatible = "zmk,matrix-transform";
         rows = <1>;
-        columns = <8>;
+        columns = <5>;
         map = <
-            RC(0,0) RC(0,1)       RC(0,6) RC(0,5)
-            RC(0,2)        RC(0,4)
-            RC(0,3)        RC(0,7)
+            RC(0,0) RC(0,3) RC(0,4)
+            RC(0,1) RC(0,2) 
         >;
     };
 
@@ -65,17 +63,42 @@
 };
 
 &physical_layout0 {
-    kscan = <&kscan0>; // Label of the kscan node this layout uses
-    transform = <&default_transform>; // Label of the matrix transform this layout uses
+    kscan = <&kscan0>;
+    transform = <&default_transform>;
 };
 
-#define PLOOPY_MOUSE_FLASH_SIZE_M 16
+&sram0 {
+    reg = <0x20000004 ((DT_SIZE_K(264)) - 4)>;
+};
+
+/ {
+    sram@20000000 {
+        compatible = "zephyr,memory-region", "mmio-sram";
+        reg = <0x20000000 0x4>;
+        zephyr,memory-region = "RetainedMem";
+        status = "okay";
+
+        retainedmem {
+            compatible = "zephyr,retained-ram";
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <1>;
+            boot_mode: retention@0 {
+                compatible = "zephyr,retention";
+                status = "okay";
+                reg = <0x0 0x1>;
+            };
+        };
+    };
+};
+
+#define PLOOPY_CLASSIC_2_FLASH_SIZE_M 16
 
 &flash0 {
     /* 16MB of flash minus the 0x100 used for
      * the second stage bootloader
      */
-    reg = <0x10000000 DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M)>;
+    reg = <0x10000000 DT_SIZE_M(PLOOPY_CLASSIC_2_FLASH_SIZE_M)>;
 
     partitions {
         compatible = "fixed-partitions";
@@ -89,19 +112,19 @@
         };
 
         /*
-         * Start at the beginning of usable flash, PLOOPY_MOUSE_FLASH_SIZE_M MB minus the
+         * Start at the beginning of usable flash, PLOOPY_CLASSIC_2_FLASH_SIZE_M MB minus the
          * second stage space and the 16 KiB reserved for settings
          */
         code_partition: partition@100 {
             label = "code";
-            reg = <0x100 (DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M) - 0x100 - DT_SIZE_K(16))>;
+            reg = <0x100 (DT_SIZE_M(PLOOPY_CLASSIC_2_FLASH_SIZE_M) - 0x100 - DT_SIZE_K(16))>;
             read-only;
         };
 
 
         /* Set 16Kb of storage at the end of the of flash */
         storage_partition: partition@FFC000 {
-            reg = <(DT_SIZE_M(PLOOPY_MOUSE_FLASH_SIZE_M) - DT_SIZE_K(16)) DT_SIZE_K(16)>;
+            reg = <(DT_SIZE_M(PLOOPY_CLASSIC_2_FLASH_SIZE_M) - DT_SIZE_K(16)) DT_SIZE_K(16)>;
         };
     };
 };
@@ -120,8 +143,7 @@
 
         // pmw3360 driver parameters
         irq-gpios = <&gpio0 9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        cpi = <1200>;
-        rotate-180;
+        cpi = <900>;
     };
 };
 
@@ -134,7 +156,7 @@
 
 &gpio0 {
     status = "okay";
-    gpio-reserved-ranges = < 1 3 4 6 8 10 11 16 18 20 25 27 29 >;
+    gpio-reserved-ranges = < 1 3 4 6 8 10 11 14 16 18 20 22 24 25 27 29 >;
 };
 
 &adc {
@@ -180,6 +202,10 @@
 
 zephyr_udc0: &usbd {
     status = "okay";
+};
+
+&timer {
+  status = "okay";
 };
 
 &vreg {

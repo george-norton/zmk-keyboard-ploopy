@@ -3,9 +3,6 @@
 
 if BOARD_PLOOPY_CLASSIC_2
 
-config BOARD
-    default "ploopy_classic_2"
-
 config RP2_FLASH_W25Q080
     default y
 
