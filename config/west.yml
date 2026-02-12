@@ -8,8 +8,8 @@ manifest:
       url-base: https://github.com/george-norton
   projects:
     - name: zmk
-      remote: petejohanson
-      revision: core/move-to-zephyr-4-1
+      remote: zmkfirmware
+      revision: main
       import: app/west.yml
     - name: zmk-driver-pmw3360
       remote: george-norton
