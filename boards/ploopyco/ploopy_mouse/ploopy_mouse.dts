@@ -21,6 +21,7 @@
         zephyr,flash = &flash0;
         zephyr,flash-controller = &ssi;
         zephyr,code-partition = &code_partition;
+        zephyr,boot-mode = &boot_mode;
         zmk,kscan = &kscan0;
     };
 
@@ -68,6 +69,31 @@
 &physical_layout0 {
     kscan = <&kscan0>; // Label of the kscan node this layout uses
     transform = <&default_transform>; // Label of the matrix transform this layout uses
+};
+
+&sram0 {
+    reg = <0x20000004 ((DT_SIZE_K(264)) - 4)>;
+};
+
+/ {
+    sram@20000000 {
+        compatible = "zephyr,memory-region", "mmio-sram";
+        reg = <0x20000000 0x4>;
+        zephyr,memory-region = "RetainedMem";
+        status = "okay";
+
+        retainedmem {
+            compatible = "zephyr,retained-ram";
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <1>;
+            boot_mode: retention@0 {
+                compatible = "zephyr,retention";
+                status = "okay";
+                reg = <0x0 0x1>;
+            };
+        };
+    };
 };
 
 #define PLOOPY_MOUSE_FLASH_SIZE_M 16

@@ -3,3 +3,6 @@
 
 config BOARD_PLOOPY_MOUSE
 	select SOC_RP2040
+	imply RETAINED_MEM
+	imply RETENTION
+	imply RETENTION_BOOT_MODE
